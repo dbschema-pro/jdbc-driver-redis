@@ -1,0 +1,20 @@
+package com.wisecoders.jdbc.redis.response
+
+import com.wisecoders.jdbc.redis.RedisConnection
+import com.wisecoders.jdbc.redis.RedisResultSet
+import java.sql.ResultSet
+
+class RedisShutdownResponse private constructor() : RedisResponse {
+    override fun processResponse(
+        connection: RedisConnection,
+        command: String,
+        response: Any
+    ): ResultSet {
+        return RedisResultSet()
+    }
+
+    companion object {
+        @JvmField
+        val INSTANCE: RedisResponse = RedisShutdownResponse()
+    }
+}
