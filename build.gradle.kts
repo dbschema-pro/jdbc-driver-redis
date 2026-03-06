@@ -9,5 +9,6 @@ jdbcDriver {
 }
 
 dependencies {
+    implementation(libs.wisecoders.commonLib.commonSlf4j)
     testImplementation(libs.mockito.core)
 }

@@ -8,23 +8,15 @@ import java.net.Socket
 import java.net.UnknownHostException
 
 class RedisSocketIO(
-    host: String?,
-    port: Int
+    val host: String,
+    val port: Int
 ) : RedisIO {
     private var socket: Socket? = null
-    private var outputStreamWriter: OutputStreamWriter? = null
-    private var inputStream: RedisInputStream? = null
-    private var host: String? = null
-    private var port = 0
+    private val outputStreamWriter: OutputStreamWriter
+    private var inputStream: RedisInputStream
 
     init {
-        this.host = host
-        this.port = port
-        init()
-    }
 
-    @Throws(UnknownHostException::class, IOException::class)
-    private fun init() {
         println("Connecting to socket $host:$port")
         this.socket = Socket(host, port)
         this.outputStreamWriter = OutputStreamWriter(socket!!.getOutputStream())
@@ -36,10 +28,10 @@ class RedisSocketIO(
         var decode: Any? = null
 
         if ( command != null ) {
-            outputStreamWriter!!.write(command.toCharArray())
+            outputStreamWriter.write(command.toCharArray())
         }
-        outputStreamWriter!!.flush()
-        decode = decode(inputStream!!)
+        outputStreamWriter.flush()
+        decode = decode(inputStream)
 
         return decode
     }
@@ -52,7 +44,6 @@ class RedisSocketIO(
         } catch (e: IOException) {
             println("Could not close RedisSocketIO")
         }
-        init()
     }
 
     @Throws(IOException::class)

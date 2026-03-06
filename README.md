@@ -1,7 +1,8 @@
+The driver is an effort to implement the JDBC API for Redis. This is provided by [DbSchema Database Designer](https://dbschema.com)
+
 [![Build Status](https://travis-ci.org/mtpettyp/jdbc-redis.svg?branch=master)](https://travis-ci.org/mtpettyp/jdbc-redis)
 [![Coverage Status](https://coveralls.io/repos/github/mtpettyp/jdbc-redis/badge.svg?branch=master)](https://coveralls.io/github/mtpettyp/jdbc-redis?branch=master)
 
-jdbc-redis is an effort to implement the JDBC API for Redis.
 
 ## Note
 

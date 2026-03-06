@@ -19,7 +19,7 @@ object RedisConnectionFactory {
         val io: RedisIO
         try {
             io = RedisSocketIO(host, port)
-        } catch (e: UnknownHostException) {
+        } catch (_: UnknownHostException) {
             throw SQLException("Can't find host: $host")
         } catch (e: IOException) {
             throw SQLException("Couldn't connect (" + e.message + ")")

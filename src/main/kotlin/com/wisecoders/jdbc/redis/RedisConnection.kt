@@ -19,7 +19,7 @@ import java.sql.Struct
 import java.util.Properties
 import java.util.concurrent.Executor
 
-class RedisConnection(
+class RedisConnection constructor(
     io: RedisIO,
     db: Int,
     info: Properties
@@ -30,32 +30,18 @@ class RedisConnection(
     private var db = 0
     private val maxRetries = 3
     private val maxTimeout = 3000
-    private var info: Properties? = null
-
 
     init {
         this.io = io
         isClosed = false
         this.db = db
-        this.info = info.clone() as Properties
 
-        initRedis()
-    }
-
-    /**
-     * Initialize Redis Connection (Authentication and DB Selection)
-     *
-     * @author flichtenegger
-     * @throws SQLException
-     */
-    @Throws(SQLException::class)
-    private fun initRedis() {
         // we got a connection, let's try to authenticate
-        if (info != null && info!!.getProperty(PROPERTY_PASSWORD) != null && info!!.getProperty(PROPERTY_PASSWORD).isNotEmpty()
-        ) {
+        val passwd = info.getProperty(PROPERTY_PASSWORD)
+        if ( passwd != null && passwd.isNotEmpty() ) {
             try {
                 RedisCommandProcessor.runCommand(
-                    this, (RedisCommand.AUTH.toString() + " " + info!!.getProperty(PROPERTY_PASSWORD))
+                    this, (RedisCommand.AUTH.toString() + " " + passwd)
                 )
             } catch (e: RedisParseException) {
                 throw SQLException(e)
@@ -413,13 +399,9 @@ class RedisConnection(
 
     @Throws(SQLException::class)
     fun msgToServer(redisMsg: String): Any {
-        var objRet: Any? = null
         var iCounter = 0
 
-        val _io = io
-        if ( _io == null ) {
-            throw SQLException("No connection to Redis")
-        }
+        val _io = io ?: throw SQLException("No connection to Redis")
 
         while (iCounter < maxRetries) {
             try {
@@ -427,8 +409,7 @@ class RedisConnection(
             } catch (e: Exception) {
                 println("Connection to redis is closed: " + e.message)
                 try {
-                    io!!.reconnect()
-                    initRedis()
+                    _io.reconnect()
                 } catch (io: Exception) {
                     println("Problem connecting to redis: " + io.message)
                 }

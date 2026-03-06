@@ -27,27 +27,20 @@ class JdbcDriver : Driver {
         } else {
             // remove prefix so we can use URI parsing.
             val rawUrl = url.replaceFirst("jdbc:".toRegex(), "")
-            var host = DEFAULT_HOST
-            var port = DEFAULT_PORT
-            var dbnb = DEFAULT_DBNB
             try {
                 val uri = URI(rawUrl)
 
-                host = uri.host ?: DEFAULT_HOST
-                port = if (uri.port != -1) uri.port else DEFAULT_PORT
 
-                dbnb = DEFAULT_PORT
+                val host = uri.host ?: DEFAULT_HOST
+                val port = if (uri.port != -1) uri.port else DEFAULT_PORT
 
-                if (uri.path != null && uri.path.length > 1) {
-                    dbnb = uri.path.substring(1).toInt()
-                }
+                val dbnb = uri.path?.removePrefix("/")?.toIntOrNull() ?: 0
+                return RedisConnectionFactory.getConnection(host, port, dbnb, info)
             } catch (e: URISyntaxException) {
                 throw SQLException("Could not parse JDBC URL: $url", e)
             } catch (e: NumberFormatException) {
                 throw SQLException("Could not parse JDBC URL: $url", e)
             }
-
-            return RedisConnectionFactory.getConnection(host, port, dbnb, info)
         }
     }
 
