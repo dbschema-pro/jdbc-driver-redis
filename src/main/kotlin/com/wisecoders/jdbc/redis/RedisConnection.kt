@@ -301,12 +301,12 @@ class RedisConnection constructor(
 
     @Throws(SQLException::class)
     override fun rollback() {
-        rollback(null)
+        // Redis does not support transactions — no-op
     }
 
     @Throws(SQLException::class)
     override fun rollback(savepoint: Savepoint?) {
-        rollback(null)
+        // Redis does not support transactions — no-op
     }
 
     @Throws(SQLException::class)

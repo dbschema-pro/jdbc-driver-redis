@@ -87,8 +87,9 @@ class RedisStatement(conn: RedisConnection) : RedisAbstractStatement(conn), Stat
         try {
             val resultSet = RedisCommandProcessor.runCommand(super._connection, sql)
 
-            return if ( resultSet.next()) {
-                resultSet.getInt(0)
+            return if (resultSet.next()) {
+                val value: String? = resultSet.getString(0)
+                value?.toIntOrNull() ?: 1
             } else {
                 0
             }

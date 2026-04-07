@@ -65,7 +65,7 @@ class RedisPreparedStatement(
     @Throws(SQLException::class)
     override fun executeQuery(): ResultSet? {
         this.execute()
-        return this.resultSet
+        return this._resultSet
     }
 
     @Throws(SQLException::class)
@@ -546,7 +546,7 @@ class RedisPreparedStatement(
     @Throws(SQLException::class)
     override fun executeQuery(sql: String): ResultSet? {
         this.execute(sql)
-        return this.resultSet
+        return this._resultSet
     }
 
     @Throws(SQLException::class)
@@ -629,7 +629,7 @@ class RedisPreparedStatement(
 
     @Throws(SQLException::class)
     override fun getResultSet(): ResultSet {
-        return this.resultSet
+        return this._resultSet
     }
 
     @Throws(SQLException::class)
@@ -684,17 +684,14 @@ class RedisPreparedStatement(
 
     @Throws(SQLException::class)
     override fun setFetchSize(rows: Int) {
-        throw SQLFeatureNotSupportedException()
     }
 
     @Throws(SQLException::class)
     override fun setMaxFieldSize(max: Int) {
-        throw SQLFeatureNotSupportedException()
     }
 
     @Throws(SQLException::class)
     override fun setMaxRows(max: Int) {
-        throw SQLFeatureNotSupportedException()
     }
 
     @Throws(SQLException::class)
